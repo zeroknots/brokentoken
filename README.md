@@ -200,12 +200,6 @@ caller's allowance from the sender in `transferFrom` even if the caller and the 
 address, giving `transfer(dst, amt)` and `transferFrom(address(this), dst, amt)` a different
 semantics in this case.
 
-*examples*:
-
-Examples of both semantics are provided:
-
-- [ERC20.sol](./src/ERC20.sol): does not attempt to decrease allowance
-- [TransferFromSelf.sol](./src/TransferFromSelf.sol): always attempts to decrease the allowance
 
 ## Non `string` metadata
 
