@@ -17,7 +17,7 @@ Write your foundry test as follows:
 pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 
-import {BrokenToken} from "weirdtoken/BrokenToken.sol";
+import {BrokenToken} from "brokentoken/BrokenToken.sol";
 
 
 contract YourTest is Test, BrokenToken {
