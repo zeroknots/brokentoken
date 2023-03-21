@@ -46,11 +46,11 @@ abstract contract BrokenToken is Test {
     uint256 MAX_INT = type(uint256).max;
 
 
-    IERC20 public weirdERC20;
-    string public weirdERC20_NAME;
+    IERC20 public brokenERC20;
+    string public brokenERC20_NAME;
 
-    IERC20 public weirdERC20_2;
-    string public weirdERC20_2_NAME;
+    IERC20 public brokenERC20_2;
+    string public brokenERC20_2_NAME;
     IERC20 public normalERC20;
 
 
@@ -60,8 +60,8 @@ abstract contract BrokenToken is Test {
 
     modifier useBrokenToken() {
         for (uint256 i; i < brokenTokens.length; ++i) {
-            weirdERC20 = IERC20(brokenTokens[i].addr);
-            weirdERC20_NAME = brokenTokens[i].name;
+            brokenERC20 = IERC20(brokenTokens[i].addr);
+            brokenERC20_NAME = brokenTokens[i].name;
             _;
         }
     }
@@ -69,10 +69,10 @@ abstract contract BrokenToken is Test {
     modifier useBrokenTokenPair() {
         for (uint256 i; i < brokenTokens.length; ++i) {
             for (uint256 y = i; y < brokenTokens.length; ++y) {
-                weirdERC20 = IERC20(brokenTokens[i].addr);
-                weirdERC20_NAME = brokenTokens[i].name;
-                weirdERC20_2 = IERC20(brokenTokens[y].addr);
-                weirdERC20_2_NAME = brokenTokens[y].name;
+                brokenERC20 = IERC20(brokenTokens[i].addr);
+                brokenERC20_NAME = brokenTokens[i].name;
+                brokenERC20_2 = IERC20(brokenTokens[y].addr);
+                brokenERC20_2_NAME = brokenTokens[y].name;
 
                 _;
             }
@@ -82,7 +82,7 @@ abstract contract BrokenToken is Test {
     modifier useBrokenAndNormal() {
         normalERC20 = IERC20(address(new MockERC20("Normal", "NRM", 18)));
         for (uint256 i; i < brokenTokens.length; ++i) {
-            weirdERC20 = IERC20(brokenTokens[i].addr);
+            brokenERC20 = IERC20(brokenTokens[i].addr);
             _;
         }
     }
