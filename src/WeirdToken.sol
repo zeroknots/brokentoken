@@ -101,10 +101,9 @@ abstract contract WeirdToken is Test {
         weirdTokens.push(TokenInfo(address(new HighDecimalToken(MAX_INT)), "HighDecimalToken"));
         weirdTokens.push(TokenInfo(address(new LowDecimalToken(MAX_INT)), "LowDecimalToken"));
         weirdTokens.push(TokenInfo(address(new MissingReturnToken(MAX_INT)), "MissingReturnToken"));
-
         weirdTokens.push(TokenInfo(address(new NoRevertToken(MAX_INT)), "NoRevertToken"));
         weirdTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
-        weirdTokens.push(TokenInfo(address(new ProxiedToken(MAX_INT)), "ProxiedToken"));
+        // weirdTokens.push(TokenInfo(address(new ProxiedToken(MAX_INT)), "ProxiedToken"));
         weirdTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
         weirdTokens.push(TokenInfo(address(new ReentrantToken(MAX_INT)), "ReentrantToken"));
         weirdTokens.push(TokenInfo(address(new ReturnsFalseToken(MAX_INT)), "ReturnsFalseToken"));

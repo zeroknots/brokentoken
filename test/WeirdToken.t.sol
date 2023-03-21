@@ -21,5 +21,8 @@ contract WeirdTokenTest is Test, WeirdToken {
         weirdERC20.approve(address(vault), 1_000_000);
         vault.deposit(100, bob);
         vm.stopPrank();
+
+        assertEq(vault.balanceOf(bob) != 0, true);
+
     }
 }
