@@ -29,6 +29,15 @@ contract YourTest is Test, BrokenToken {
 }
 ```
 
+
+# Roadmap
+
+- add more weird ERC20
+- add weird ERC721 
+- add weird ERC1155
+
+Please open a GH issue if you want me to add specific test cases
+
 # Testing Scope
 This test suite is currently heavily utilizing [d-xo/weird-erc20](https://github.com/d-xo/weird-erc20/) and implements following test cases:
 
