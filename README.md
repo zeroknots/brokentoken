@@ -1,5 +1,5 @@
 # Weird Token
-The Weird Token Tester is a tool designed to automatically test ERC20 tokens for unexpected behavior that may result in smart contract exploits. The ERC20 specification is loosely defined, and many developers violate the few semantic requirements that are imposed. This makes building smart contracts that interface directly with ERC20 tokens challenging.
+The Weird Token Tester is a tool designed to automatically test smart contracts that interact with ERC20 tokens for unexpected behavior that may result in exploits. The ERC20 specification is loosely defined, and many developers violate the few semantic requirements that are imposed. This makes building smart contracts that interface directly with ERC20 tokens challenging.
 
 The Weird Token Tester is based on a repository of minimal example implementations in Solidity of ERC20 tokens with behavior that may be surprising or unexpected. The tool is intended for use by developers and auditors to test smart contracts that utilize ERC20 tokens and identify potential vulnerabilities.
 
