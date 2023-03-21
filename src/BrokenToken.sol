@@ -42,7 +42,7 @@ struct TokenInfo {
     string name;
 }
 
-abstract contract WeirdToken is Test {
+abstract contract BrokenToken is Test {
     uint256 MAX_INT = type(uint256).max;
 
 
@@ -56,68 +56,68 @@ abstract contract WeirdToken is Test {
 
     // address[] public weirdTokens;
 
-    TokenInfo[] public weirdTokens;
+    TokenInfo[] public brokenTokens;
 
-    modifier useWeirdToken() {
-        for (uint256 i; i < weirdTokens.length; ++i) {
-            weirdERC20 = IERC20(weirdTokens[i].addr);
-            weirdERC20_NAME = weirdTokens[i].name;
+    modifier useBrokenToken() {
+        for (uint256 i; i < brokenTokens.length; ++i) {
+            weirdERC20 = IERC20(brokenTokens[i].addr);
+            weirdERC20_NAME = brokenTokens[i].name;
             _;
         }
     }
 
-    modifier useWeirdTokenPair() {
-        for (uint256 i; i < weirdTokens.length; ++i) {
-            for (uint256 y = i; y < weirdTokens.length; ++y) {
-                weirdERC20 = IERC20(weirdTokens[i].addr);
-                weirdERC20_NAME = weirdTokens[i].name;
-                weirdERC20_2 = IERC20(weirdTokens[y].addr);
-                weirdERC20_2_NAME = weirdTokens[y].name;
+    modifier useBrokenTokenPair() {
+        for (uint256 i; i < brokenTokens.length; ++i) {
+            for (uint256 y = i; y < brokenTokens.length; ++y) {
+                weirdERC20 = IERC20(brokenTokens[i].addr);
+                weirdERC20_NAME = brokenTokens[i].name;
+                weirdERC20_2 = IERC20(brokenTokens[y].addr);
+                weirdERC20_2_NAME = brokenTokens[y].name;
 
                 _;
             }
         }
     }
 
-    modifier useWeirdAndNormal() {
+    modifier useBrokenAndNormal() {
         normalERC20 = IERC20(address(new MockERC20("Normal", "NRM", 18)));
-        for (uint256 i; i < weirdTokens.length; ++i) {
-            weirdERC20 = IERC20(weirdTokens[i].addr);
+        for (uint256 i; i < brokenTokens.length; ++i) {
+            weirdERC20 = IERC20(brokenTokens[i].addr);
             _;
         }
     }
 
     constructor() {
-        weirdTokens.push(TokenInfo(address(new MockERC20("Normal", "NRM", 18)), "Vanilla ERC20"));
+        brokenTokens.push(TokenInfo(address(new MockERC20("Normal", "NRM", 18)), "Vanilla ERC20"));
         // weirdTokens.push(address(new ReturnsTwoToken()));
         // weirdTokens.push(address(new RevertingToken()));
         // weirdTokens.push(address(new ReturnsTooLittleToken()));
         // weirdTokens.push(address(new ReturnsTooMuchToken()));
         // weirdTokens.push(address(new ReturnsGarbageToken()));
-        weirdTokens.push(TokenInfo(address(new ApprovalRaceToken(MAX_INT)), "ApprovalRaceToken"));
-        weirdTokens.push(TokenInfo(address(new ApprovalToZeroToken(MAX_INT)), "ApprovalToZeroToken"));
-        weirdTokens.push(TokenInfo(address(new BlockableToken(MAX_INT)), "BlockableToken"));
-        weirdTokens.push(TokenInfo(address(new DaiPermit(MAX_INT)), "DaiPermit"));
-        weirdTokens.push(TokenInfo(address(new HighDecimalToken(MAX_INT)), "HighDecimalToken"));
-        weirdTokens.push(TokenInfo(address(new LowDecimalToken(MAX_INT)), "LowDecimalToken"));
-        weirdTokens.push(TokenInfo(address(new MissingReturnToken(MAX_INT)), "MissingReturnToken"));
-        weirdTokens.push(TokenInfo(address(new NoRevertToken(MAX_INT)), "NoRevertToken"));
-        weirdTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
+        brokenTokens.push(TokenInfo(address(new ApprovalRaceToken(MAX_INT)), "ApprovalRaceToken"));
+        brokenTokens.push(TokenInfo(address(new ApprovalToZeroToken(MAX_INT)), "ApprovalToZeroToken"));
+        brokenTokens.push(TokenInfo(address(new BlockableToken(MAX_INT)), "BlockableToken"));
+        brokenTokens.push(TokenInfo(address(new DaiPermit(MAX_INT)), "DaiPermit"));
+        brokenTokens.push(TokenInfo(address(new HighDecimalToken(MAX_INT)), "HighDecimalToken"));
+        brokenTokens.push(TokenInfo(address(new LowDecimalToken(MAX_INT)), "LowDecimalToken"));
+        brokenTokens.push(TokenInfo(address(new MissingReturnToken(MAX_INT)), "MissingReturnToken"));
+        brokenTokens.push(TokenInfo(address(new NoRevertToken(MAX_INT)), "NoRevertToken"));
+        brokenTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
         // weirdTokens.push(TokenInfo(address(new ProxiedToken(MAX_INT)), "ProxiedToken"));
-        weirdTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
-        weirdTokens.push(TokenInfo(address(new ReentrantToken(MAX_INT)), "ReentrantToken"));
-        weirdTokens.push(TokenInfo(address(new ReturnsFalseToken(MAX_INT)), "ReturnsFalseToken"));
-        weirdTokens.push(TokenInfo(address(new RevertToZeroToken(MAX_INT)), "RevertToZeroToken"));
-        weirdTokens.push(TokenInfo(address(new RevertZeroToken(MAX_INT)), "RevertZeroToken"));
-        weirdTokens.push(TokenInfo(address(new TransferFeeToken(1337, 1)), "TransferFeeToken"));
-        weirdTokens.push(TokenInfo(address(new TransferFromSelfToken(MAX_INT)), "TransferFromSelfToken"));
-        weirdTokens.push(TokenInfo(address(new Uint96ERC20(1337)), "Uint96ERC20"));
-        weirdTokens.push(TokenInfo(address(new Proxy(MAX_INT)), "Proxy"));
+        brokenTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
+        brokenTokens.push(TokenInfo(address(new ReentrantToken(MAX_INT)), "ReentrantToken"));
+        brokenTokens.push(TokenInfo(address(new ReturnsFalseToken(MAX_INT)), "ReturnsFalseToken"));
+        brokenTokens.push(TokenInfo(address(new RevertToZeroToken(MAX_INT)), "RevertToZeroToken"));
+        brokenTokens.push(TokenInfo(address(new RevertZeroToken(MAX_INT)), "RevertZeroToken"));
+        brokenTokens.push(TokenInfo(address(new TransferFeeToken(1337, 1)), "TransferFeeToken"));
+        brokenTokens.push(TokenInfo(address(new TransferFromSelfToken(MAX_INT)), "TransferFromSelfToken"));
+        brokenTokens.push(TokenInfo(address(new Uint96ERC20(1337)), "Uint96ERC20"));
+        brokenTokens.push(TokenInfo(address(new Proxy(MAX_INT)), "Proxy"));
 
 
         // create labels for weird tokens. Helps debugging
-        for(uint256 i; i < weirdTokens.length; ++i) {
-            vm.label(weirdTokens[i].addr, weirdTokens[i].name);
+        for(uint256 i; i < brokenTokens.length; ++i) {
+            vm.label(brokenTokens[i].addr, brokenTokens[i].name);
         }
     }
 }
