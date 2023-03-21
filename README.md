@@ -41,7 +41,6 @@ This has been exploited in the wild on multiple occasions (e.g. [imBTC Uniswap p
 drained](https://defirate.com/imbtc-uniswap-hack/), [lendf.me
 drained](https://defirate.com/dforce-hack/))
 
-*example*: [Reentrant.sol](./src/Reentrant.sol)
 
 ## Missing Return Values
 
@@ -66,8 +65,6 @@ Two example tokens are provided:
 - `MissingReturns`: does not return a bool for any erc20 operation
 - `ReturnsFalse`: declares a bool return, but then returns false for every erc20 operation
 
-*example*: [MissingReturns.sol](./src/MissingReturns.sol)  
-*example*: [ReturnsFalse.sol](./src/ReturnsFalse.sol)
 
 ## Fee on Transfer
 
@@ -77,7 +74,6 @@ so in the future (e.g. `USDT`, `USDC`).
 The `STA` transfer fee was used to drain $500k from several balancer pools ([more
 details](https://medium.com/@1inch.exchange/balancer-hack-2020-a8f7131c980e)).
 
-*example*: [TransferFee.sol](./src/TransferFee.sol)
 
 ## Balance Modifications Outside of Transfers (rebasing/airdrops)
 
@@ -106,8 +102,6 @@ interactions with the token in question if an upgrade is detected. (e.g. the [`T
 adapter](https://github.com/makerdao/dss-deploy/blob/7394f6555daf5747686a1b29b2f46c6b2c64b061/src/join.sol#L321)
 used by MakerDAO).
 
-*example*: [Upgradable.sol](./src/Upgradable.sol)
-
 ## Flash Mintable Tokens
 
 Some tokens (e.g. `DAI`) allow for so called "flash minting", which allows tokens to be minted for the duration
@@ -131,7 +125,6 @@ the blocklist. This could potentially be the result of regulatory action against
 itself, against a single user of the contract (e.g. a Uniswap LP), or could also be a part of an
 extortion attempt against users of the blocked contract.
 
-*example*: [BlockList.sol](./src/BlockList.sol)
 
 ## Pausable Tokens
 
@@ -140,7 +133,6 @@ Some tokens can be paused by an admin (e.g. `BNB`, `ZIL`).
 Similary to the blocklist issue above, an admin controlled pause feature opens users
 of the token to risk from a malicious or compromised token owner.
 
-*example*: [Pausable.sol](./src/Pausable.sol)
 
 ## Approval Race Protections
 
@@ -151,7 +143,6 @@ Some tokens (e.g. `USDT`, `KNC`) do not allow approving an amount `M > 0` when a
 [This PR](https://github.com/Uniswap/uniswap-v2-periphery/pull/26#issuecomment-647543138) shows some
 in the wild problems caused by this issue.
 
-*example*: [Approval.sol](./src/Approval.sol)
 
 ## Revert on Approval To Zero Address
 
@@ -160,13 +151,11 @@ Some tokens (e.g. OpenZeppelin) will revert if trying to approve the zero addres
 
 Integrators may need to add special cases to handle this logic if working with such a token.
 
-*example*: [ApprovalToZero.sol](./src/ApprovalToZero.sol)
 
 ## Revert on Zero Value Transfers
 
 Some tokens (e.g. `LEND`) revert when transferring a zero value amount.
 
-*example*: [RevertZero.sol](./src/RevertZero.sol)
 
 ## Multiple Token Addresses
 
@@ -187,7 +176,6 @@ function rescueFunds(address token, uint amount) external nonReentrant onlyOwner
 }
 ```
 
-*example*: [Proxied.sol](./src/Proxied.sol)
 
 ## Low Decimals
 
@@ -195,7 +183,6 @@ Some tokens have low decimals (e.g. `USDC` has 6). Even more extreme, some token
 
 This may result in larger than expected precision loss.
 
-*example*: [LowDecimals.sol](./src/LowDecimals.sol)
 
 ## High Decimals
 
@@ -203,7 +190,6 @@ Some tokens have more than 18 decimals (e.g. `YAM-V2` has 24).
 
 This may trigger unexpected reverts due to overflow, posing a liveness risk to the contract.
 
-*example*: [HighDecimals.sol](./src/HighDecimals.sol)
 
 ## `transferFrom` with `src == msg.sender`
 
@@ -230,15 +216,12 @@ specification.
 
 This may cause issues when trying to consume metadata from these tokens.
 
-*example*: [Bytes32Metadata.sol](./src/Bytes32Metadata.sol)
 
 ## Revert on Transfer to the Zero Address
 
 Some tokens (e.g. openzeppelin) revert when attempting to transfer to `address(0)`.
 
 This may break systems that expect to be able to burn tokens by transferring them to `address(0)`.
-
-*example*: [RevertToZero.sol](./src/RevertToZero.sol)
 
 ## No Revert on Failure
 
@@ -249,7 +232,6 @@ While this is technically compliant with the ERC20 standard, it goes against com
 practices and may be overlooked by developers who forget to wrap their calls to `transfer` in a
 `require`.
 
-*example*: [NoRevert.sol](./src/NoRevert.sol)
 
 ## Revert on Large Approvals & Transfers
 
@@ -259,7 +241,6 @@ Both of the above tokens have special case logic in `approve` that sets `allowan
 if the approval amount is `uint256(-1)`, which may cause issues with systems that expect the value
 passed to `approve` to be reflected in the `allowances` mapping.
 
-*example*: [Uint96.sol](./src/Uint96.sol)
 
 ## Code Injection Via Token Name
 
@@ -273,4 +254,3 @@ This has been used to exploit etherdelta users in the wild ([reference](https://
 
 Some tokens ([DAI, RAI, GLM, STAKE, CHAI, HAKKA, USDFL, HNY](https://github.com/yashnaman/tokensWithPermitFunctionList/blob/master/hasDAILikePermitFunctionTokenList.json)) have a `permit()` implementation that does not follow [EIP2612](https://eips.ethereum.org/EIPS/eip-2612). Tokens that do not support permit may not revert, which [could lead to the execution of later lines of code in unexpected scenarios](https://media.dedaub.com/phantom-functions-and-the-billion-dollar-no-op-c56f062ae49f). [Uniswap's Permit2](https://github.com/Uniswap/permit2) may provide a more compatible alternative.
 
-*example*: [DaiPermit.sol](./src/DaiPermit.sol)
