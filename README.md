@@ -22,7 +22,7 @@ import {BrokenToken} from "brokentoken/BrokenToken.sol";
 
 contract YourTest is Test, BrokenToken {
 
-    function testFoobar() public useBrokenToken {
+    function testFoobar() public useBrokenToken { // such wow. much easy.
         deal(address(brokenERC20), bob, 1_000_000);
         brokenERC20.approve(address(vault), 1_000_000);
     }
