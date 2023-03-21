@@ -35,18 +35,33 @@ import {TransferFromSelfToken} from "weird-erc20/TransferFromSelf.sol";
 import {Uint96ERC20} from "weird-erc20/Uint96.sol";
 import {Proxy} from "weird-erc20/Upgradable.sol";
 
-abstract contract WeirdToken {
+import "forge-std/Test.sol";
+
+struct TokenInfo {
+    address addr;
+    string name;
+}
+
+abstract contract WeirdToken is Test {
+    uint256 MAX_INT = type(uint256).max;
+
+
     IERC20 public weirdERC20;
+    string public weirdERC20_NAME;
+
     IERC20 public weirdERC20_2;
+    string public weirdERC20_2_NAME;
     IERC20 public normalERC20;
 
 
-    address[] public weirdTokens;
-    uint256 MAX_INT = type(uint256).max;
+    // address[] public weirdTokens;
+
+    TokenInfo[] public weirdTokens;
 
     modifier useWeirdToken() {
         for (uint256 i; i < weirdTokens.length; ++i) {
-            weirdERC20 = IERC20(weirdTokens[i]);
+            weirdERC20 = IERC20(weirdTokens[i].addr);
+            weirdERC20_NAME = weirdTokens[i].name;
             _;
         }
     }
@@ -54,45 +69,56 @@ abstract contract WeirdToken {
     modifier useWeirdTokenPair() {
         for (uint256 i; i < weirdTokens.length; ++i) {
             for (uint256 y = i; y < weirdTokens.length; ++y) {
-                weirdERC20 = IERC20(weirdTokens[i]);
-                weirdERC20_2 = IERC20(weirdTokens[y]);
+                weirdERC20 = IERC20(weirdTokens[i].addr);
+                weirdERC20_NAME = weirdTokens[i].name;
+                weirdERC20_2 = IERC20(weirdTokens[y].addr);
+                weirdERC20_2_NAME = weirdTokens[y].name;
+
                 _;
             }
         }
     }
 
     modifier useWeirdAndNormal() {
-      normalERC20 = IERC20(address(new MockERC20("Normal", "NRM", 18)));
+        normalERC20 = IERC20(address(new MockERC20("Normal", "NRM", 18)));
         for (uint256 i; i < weirdTokens.length; ++i) {
-            weirdERC20 = IERC20(weirdTokens[i]);
+            weirdERC20 = IERC20(weirdTokens[i].addr);
             _;
         }
     }
 
     constructor() {
-        weirdTokens.push(address(new ReturnsTwoToken()));
-        weirdTokens.push(address(new RevertingToken()));
-        weirdTokens.push(address(new ReturnsTooLittleToken()));
-        weirdTokens.push(address(new ReturnsTooMuchToken()));
-        weirdTokens.push(address(new ReturnsGarbageToken()));
-        weirdTokens.push(address(new ApprovalRaceToken(MAX_INT)));
-        weirdTokens.push(address(new ApprovalToZeroToken(MAX_INT)));
-        weirdTokens.push(address(new BlockableToken(MAX_INT)));
-        weirdTokens.push(address(new DaiPermit(MAX_INT)));
-        weirdTokens.push(address(new HighDecimalToken(MAX_INT)));
-        weirdTokens.push(address(new LowDecimalToken(MAX_INT)));
-        weirdTokens.push(address(new MissingReturnToken(MAX_INT)));
-        weirdTokens.push(address(new NoRevertToken(MAX_INT)));
-        weirdTokens.push(address(new PausableToken(MAX_INT)));
-        weirdTokens.push(address(new ProxiedToken(MAX_INT)));
-        weirdTokens.push(address(new PausableToken(MAX_INT)));
-        weirdTokens.push(address(new ReentrantToken(MAX_INT)));
-        weirdTokens.push(address(new ReturnsFalseToken(MAX_INT)));
-        weirdTokens.push(address(new RevertToZeroToken(MAX_INT)));
-        weirdTokens.push(address(new RevertZeroToken(MAX_INT)));
-        weirdTokens.push(address(new TransferFeeToken(1337, 1)));
-        weirdTokens.push(address(new TransferFromSelfToken(MAX_INT)));
-        weirdTokens.push(address(new Uint96ERC20(1337)));
-        weirdTokens.push(address(new Proxy(MAX_INT)));
+        weirdTokens.push(TokenInfo(address(new MockERC20("Normal", "NRM", 18)), "Vanilla ERC20"));
+        // weirdTokens.push(address(new ReturnsTwoToken()));
+        // weirdTokens.push(address(new RevertingToken()));
+        // weirdTokens.push(address(new ReturnsTooLittleToken()));
+        // weirdTokens.push(address(new ReturnsTooMuchToken()));
+        // weirdTokens.push(address(new ReturnsGarbageToken()));
+        weirdTokens.push(TokenInfo(address(new ApprovalRaceToken(MAX_INT)), "ApprovalRaceToken"));
+        weirdTokens.push(TokenInfo(address(new ApprovalToZeroToken(MAX_INT)), "ApprovalToZeroToken"));
+        weirdTokens.push(TokenInfo(address(new BlockableToken(MAX_INT)), "BlockableToken"));
+        weirdTokens.push(TokenInfo(address(new DaiPermit(MAX_INT)), "DaiPermit"));
+        weirdTokens.push(TokenInfo(address(new HighDecimalToken(MAX_INT)), "HighDecimalToken"));
+        weirdTokens.push(TokenInfo(address(new LowDecimalToken(MAX_INT)), "LowDecimalToken"));
+        weirdTokens.push(TokenInfo(address(new MissingReturnToken(MAX_INT)), "MissingReturnToken"));
+
+        weirdTokens.push(TokenInfo(address(new NoRevertToken(MAX_INT)), "NoRevertToken"));
+        weirdTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
+        weirdTokens.push(TokenInfo(address(new ProxiedToken(MAX_INT)), "ProxiedToken"));
+        weirdTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
+        weirdTokens.push(TokenInfo(address(new ReentrantToken(MAX_INT)), "ReentrantToken"));
+        weirdTokens.push(TokenInfo(address(new ReturnsFalseToken(MAX_INT)), "ReturnsFalseToken"));
+        weirdTokens.push(TokenInfo(address(new RevertToZeroToken(MAX_INT)), "RevertToZeroToken"));
+        weirdTokens.push(TokenInfo(address(new RevertZeroToken(MAX_INT)), "RevertZeroToken"));
+        weirdTokens.push(TokenInfo(address(new TransferFeeToken(1337, 1)), "TransferFeeToken"));
+        weirdTokens.push(TokenInfo(address(new TransferFromSelfToken(MAX_INT)), "TransferFromSelfToken"));
+        weirdTokens.push(TokenInfo(address(new Uint96ERC20(1337)), "Uint96ERC20"));
+        weirdTokens.push(TokenInfo(address(new Proxy(MAX_INT)), "Proxy"));
+
+
+        // create labels for weird tokens. Helps debugging
+        for(uint256 i; i < weirdTokens.length; ++i) {
+            vm.label(weirdTokens[i].addr, weirdTokens[i].name);
+        }
     }
 }
