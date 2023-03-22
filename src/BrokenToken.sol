@@ -6,6 +6,7 @@ import {console2} from "forge-std/console2.sol";
 /*           NORMAL TOKENS             */
 import {MockERC20} from "solmate/test/utils/mocks/MockERC20.sol";
 import {IERC20} from "forge-std/interfaces/IERC20.sol";
+import {IERC721} from "forge-std/interfaces/IERC721.sol";
 
 /*           solmate WEIRD TOKENS             */
 import {ReturnsTwoToken} from "solmate/test/utils/weird-tokens/ReturnsTwoToken.sol";
@@ -35,9 +36,8 @@ import {TransferFromSelfToken} from "weird-erc20/TransferFromSelf.sol";
 import {Uint96ERC20} from "weird-erc20/Uint96.sol";
 import {Proxy} from "weird-erc20/Upgradable.sol";
 
-
 /*           ERC721 WEIRD TOKENS             */
-
+import {SBT721} from "./erc721/SBT721.sol";
 
 import "forge-std/Test.sol";
 
@@ -49,7 +49,6 @@ struct TokenInfo {
 abstract contract BrokenToken is Test {
     uint256 MAX_INT = type(uint256).max;
 
-
     IERC20 public brokenERC20;
     string public brokenERC20_NAME;
 
@@ -57,26 +56,29 @@ abstract contract BrokenToken is Test {
     string public brokenERC20_2_NAME;
     IERC20 public normalERC20;
 
+    IERC721 public brokenERC721;
+    string public brokenERC721_NAME;
 
     // address[] public weirdTokens;
 
-    TokenInfo[] public brokenTokens;
+    TokenInfo[] public brokenERC20Tokens;
+    TokenInfo[] public brokenERC721Tokens;
 
     modifier useBrokenToken() {
-        for (uint256 i; i < brokenTokens.length; ++i) {
-            brokenERC20 = IERC20(brokenTokens[i].addr);
-            brokenERC20_NAME = brokenTokens[i].name;
+        for (uint256 i; i < brokenERC20Tokens.length; ++i) {
+            brokenERC20 = IERC20(brokenERC20Tokens[i].addr);
+            brokenERC20_NAME = brokenERC20Tokens[i].name;
             _;
         }
     }
 
     modifier useBrokenTokenPair() {
-        for (uint256 i; i < brokenTokens.length; ++i) {
-            for (uint256 y = i; y < brokenTokens.length; ++y) {
-                brokenERC20 = IERC20(brokenTokens[i].addr);
-                brokenERC20_NAME = brokenTokens[i].name;
-                brokenERC20_2 = IERC20(brokenTokens[y].addr);
-                brokenERC20_2_NAME = brokenTokens[y].name;
+        for (uint256 i; i < brokenERC20Tokens.length; ++i) {
+            for (uint256 y = i; y < brokenERC20Tokens.length; ++y) {
+                brokenERC20 = IERC20(brokenERC20Tokens[i].addr);
+                brokenERC20_NAME = brokenERC20Tokens[i].name;
+                brokenERC20_2 = IERC20(brokenERC20Tokens[y].addr);
+                brokenERC20_2_NAME = brokenERC20Tokens[y].name;
 
                 _;
             }
@@ -85,43 +87,56 @@ abstract contract BrokenToken is Test {
 
     modifier useBrokenAndNormal() {
         normalERC20 = IERC20(address(new MockERC20("Normal", "NRM", 18)));
-        for (uint256 i; i < brokenTokens.length; ++i) {
-            brokenERC20 = IERC20(brokenTokens[i].addr);
+        for (uint256 i; i < brokenERC20Tokens.length; ++i) {
+            brokenERC20 = IERC20(brokenERC20Tokens[i].addr);
+            _;
+        }
+    }
+
+    modifier useBrokenNFT() {
+        for (uint256 i; i < brokenERC721Tokens.length; ++i) {
+            brokenERC721 = IERC721(brokenERC721Tokens[i].addr);
+            brokenERC721_NAME = brokenERC721Tokens[i].name;
             _;
         }
     }
 
     constructor() {
-        brokenTokens.push(TokenInfo(address(new MockERC20("Normal", "NRM", 18)), "Vanilla ERC20"));
+        brokenERC20Tokens.push(TokenInfo(address(new MockERC20("Normal", "NRM", 18)), "Vanilla ERC20"));
         // weirdTokens.push(address(new ReturnsTwoToken()));
         // weirdTokens.push(address(new RevertingToken()));
         // weirdTokens.push(address(new ReturnsTooLittleToken()));
         // weirdTokens.push(address(new ReturnsTooMuchToken()));
         // weirdTokens.push(address(new ReturnsGarbageToken()));
-        brokenTokens.push(TokenInfo(address(new ApprovalRaceToken(MAX_INT)), "ApprovalRaceToken"));
-        brokenTokens.push(TokenInfo(address(new ApprovalToZeroToken(MAX_INT)), "ApprovalToZeroToken"));
-        brokenTokens.push(TokenInfo(address(new BlockableToken(MAX_INT)), "BlockableToken"));
-        brokenTokens.push(TokenInfo(address(new DaiPermit(MAX_INT)), "DaiPermit"));
-        brokenTokens.push(TokenInfo(address(new HighDecimalToken(MAX_INT)), "HighDecimalToken"));
-        brokenTokens.push(TokenInfo(address(new LowDecimalToken(MAX_INT)), "LowDecimalToken"));
-        brokenTokens.push(TokenInfo(address(new MissingReturnToken(MAX_INT)), "MissingReturnToken"));
-        brokenTokens.push(TokenInfo(address(new NoRevertToken(MAX_INT)), "NoRevertToken"));
-        brokenTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new ApprovalRaceToken(MAX_INT)), "ApprovalRaceToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new ApprovalToZeroToken(MAX_INT)), "ApprovalToZeroToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new BlockableToken(MAX_INT)), "BlockableToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new DaiPermit(MAX_INT)), "DaiPermit"));
+        brokenERC20Tokens.push(TokenInfo(address(new HighDecimalToken(MAX_INT)), "HighDecimalToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new LowDecimalToken(MAX_INT)), "LowDecimalToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new MissingReturnToken(MAX_INT)), "MissingReturnToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new NoRevertToken(MAX_INT)), "NoRevertToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
         // weirdTokens.push(TokenInfo(address(new ProxiedToken(MAX_INT)), "ProxiedToken"));
-        brokenTokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
-        brokenTokens.push(TokenInfo(address(new ReentrantToken(MAX_INT)), "ReentrantToken"));
-        brokenTokens.push(TokenInfo(address(new ReturnsFalseToken(MAX_INT)), "ReturnsFalseToken"));
-        brokenTokens.push(TokenInfo(address(new RevertToZeroToken(MAX_INT)), "RevertToZeroToken"));
-        brokenTokens.push(TokenInfo(address(new RevertZeroToken(MAX_INT)), "RevertZeroToken"));
-        brokenTokens.push(TokenInfo(address(new TransferFeeToken(1337, 1)), "TransferFeeToken"));
-        brokenTokens.push(TokenInfo(address(new TransferFromSelfToken(MAX_INT)), "TransferFromSelfToken"));
-        brokenTokens.push(TokenInfo(address(new Uint96ERC20(1337)), "Uint96ERC20"));
-        brokenTokens.push(TokenInfo(address(new Proxy(MAX_INT)), "Proxy"));
-
+        brokenERC20Tokens.push(TokenInfo(address(new PausableToken(MAX_INT)), "PausableToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new ReentrantToken(MAX_INT)), "ReentrantToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new ReturnsFalseToken(MAX_INT)), "ReturnsFalseToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new RevertToZeroToken(MAX_INT)), "RevertToZeroToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new RevertZeroToken(MAX_INT)), "RevertZeroToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new TransferFeeToken(1337, 1)), "TransferFeeToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new TransferFromSelfToken(MAX_INT)), "TransferFromSelfToken"));
+        brokenERC20Tokens.push(TokenInfo(address(new Uint96ERC20(1337)), "Uint96ERC20"));
+        brokenERC20Tokens.push(TokenInfo(address(new Proxy(MAX_INT)), "Proxy"));
 
         // create labels for weird tokens. Helps debugging
-        for(uint256 i; i < brokenTokens.length; ++i) {
-            vm.label(brokenTokens[i].addr, brokenTokens[i].name);
+        for (uint256 i; i < brokenERC20Tokens.length; ++i) {
+            vm.label(brokenERC20Tokens[i].addr, brokenERC20Tokens[i].name);
+        }
+
+        brokenERC721Tokens.push(TokenInfo(address(new SBT721()), "SBT721"));
+        // create labels for weird tokens. Helps debugging
+        for (uint256 i; i < brokenERC721Tokens.length; ++i) {
+            vm.label(brokenERC721Tokens[i].addr, brokenERC721Tokens[i].name);
         }
     }
 }

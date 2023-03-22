@@ -1,4 +1,5 @@
 ds-test/=lib/forge-std/lib/ds-test/src/
 forge-std/=lib/forge-std/src/
+openzeppelin-contracts/=lib/openzeppelin-contracts/
 solmate/=lib/solmate/src/
 weird-erc20/=lib/weird-erc20/src/
