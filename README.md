@@ -10,7 +10,7 @@ The BrokenToken is based on a repository of minimal example implementations in S
 forge install zeroknots/brokentoken
 ```
 
-Write your foundry test as follows:
+Write your *ERC20* foundry test as follows:
 
 
 ```solidity
@@ -28,6 +28,27 @@ contract YourTest is Test, BrokenToken {
     }
 }
 ```
+
+Or if you want to test weird *ERC721*
+
+
+```solidity
+
+pragma solidity ^0.8.13;
+import "forge-std/Test.sol";
+
+import {BrokenToken} from "brokentoken/BrokenToken.sol";
+
+
+contract YourTest is Test, BrokenToken {
+
+    function testFoobar() public useBrokenNFT { // such wow. much easy.
+        brokenERC721.mint(alice);
+        brokenERC721.transferFrom(alice, bob, tokenId);
+    }
+}
+```
+
 
 
 # Roadmap
