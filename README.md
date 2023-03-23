@@ -1,4 +1,4 @@
-<img align="right" width="150" height="150" top="100" src="./public/readme.jpg">
+<img align="right" width="150" height="150" top="100" src="./public/readme.png">
 
 # Boilerplate.sol ![license](https://img.shields.io/github/license/zeroknots/brokentokenlabel=license) ![solidity](https://img.shields.io/badge/solidity-^0.8.0-lightgrey)
 
