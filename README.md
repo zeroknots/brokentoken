@@ -1,3 +1,8 @@
+<img align="right" width="150" height="150" top="100" src="./public/readme.jpg">
+
+# Boilerplate.sol ![license](https://img.shields.io/github/license/zeroknots/brokentokenlabel=license) ![solidity](https://img.shields.io/badge/solidity-^0.8.0-lightgrey)
+
+
 # BrokenToken 
 The BrokenToken is a tool designed to automatically test smart contracts that interact with ERC20 tokens for unexpected behavior that may result in exploits. The ERC20 specification is loosely defined, and many developers violate the few semantic requirements that are imposed. This makes building smart contracts that interface directly with ERC20 tokens challenging.
 
